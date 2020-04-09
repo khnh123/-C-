@@ -1,0 +1,23 @@
+
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+
+
+
+int main() {
+
+    int A, B;
+    cin >>  A >> B;
+
+    for (int i = A; i <= B; i++){
+
+        if (i % 2 == 0) {
+            // x - чётное число
+            cout << i << " ";
+        }
+    }
+
+    return 0;
+};
