@@ -1,0 +1,36 @@
+
+#include <iostream>
+#include <cmath>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+void reverse(string& strg)
+{
+    string temp (strg);
+    int size = strg.size () ;
+    for (int i = 0; i < size; i++)
+    {
+        strg[i] = temp [size -1 - i];
+    }
+}
+bool IsPalindrom(string& strg)
+{
+
+    string temp (strg);
+    reverse (temp);
+    return (temp == strg);
+}
+vector<string> PalindromFilter(vector<string> v, int  minLength){
+    vector<string> vect;
+    for (int i=0; i<v.size(); i++) {  // go through vector
+        //cout << v[i] << " ";
+        if (v[i].size() >= minLength){ // Check length
+            if (IsPalindrom(v[i])) {
+                vect.push_back(v[i]);
+            }
+        }
+    }
+    return vect;
+}
