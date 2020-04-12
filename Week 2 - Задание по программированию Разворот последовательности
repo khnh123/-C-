@@ -1,0 +1,7 @@
+void Reverse(vector<int> &v){
+    vector<int> numbers;
+    for (int i=v.size()-1; i>=0; i--) {
+        numbers.push_back(v[i]);
+    }
+    v = numbers;
+}
