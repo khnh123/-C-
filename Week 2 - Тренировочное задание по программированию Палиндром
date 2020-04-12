@@ -1,0 +1,46 @@
+
+#include <iostream>
+#include <cmath>
+#include <string>
+
+using namespace std;
+
+void reverse(string& strg)
+{
+    string temp (strg);
+    int size = strg.size () ;
+    for (int i = 0; i < size; i++)
+    {
+        strg[i] = temp [size -1 - i];
+    }
+}
+bool IsPalindrom(string& strg)
+{
+
+    string temp (strg);
+    reverse (temp);
+    return (temp == strg);
+}
+
+/*
+int main ( )
+{
+// Variable declaration
+    string a;
+// Input
+    //cin >> a;
+    getline (cin, a);
+// Check
+
+
+// Processing
+
+// Output
+
+    if (isPalindrome(a)){
+        cout << "true";
+    }
+    else{ cout << "false";}
+    return 0;
+}
+*/
