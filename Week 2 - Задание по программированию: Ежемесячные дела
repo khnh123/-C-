@@ -1,0 +1,131 @@
+
+#include <iostream>
+#include <cmath>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <iterator>
+#include <sstream>
+
+
+using namespace std;
+
+std::map<string, int> my_map = {
+        { "January", 31 },
+        { "February" , 28},
+        { "March", 31 },
+        { "April", 30 },
+        { "May", 31 },
+        { "June", 30 },
+        { "July", 31 },
+        { "August", 31 },
+        { "September", 30 },
+        { "October", 31 },
+        { "November", 30 },
+        { "December", 31 },
+};
+
+void action(vector<string> &business, int pos, string task ){
+    string ADD = "ADD"; //+int
+    //string QUIET  = "QUIET"; //+int
+    //string COME = "COME"; // +int, -int
+    //string WORRY_COUNT_s = "WORRY_COUNT"; // +int, -int
+    //int WORRY_COUNT = 0;
+    //  cout << input << " " << pos;
+
+        // WORRY action
+            business[pos] += task + " ";
+
+        /*
+        for (int i=0; i<queue.size(); i++){ // print vector (queue)
+            cout << queue[i] << " " ;
+        }
+         */
+
+}
+
+int main ( ) {
+    int n;
+    cin >> n; //  Количество операций Q,
+    vector<int> months = {31,28,31,30,31,30,31,31,30,31,30,31};
+    //vector<string> business(0); // очередь
+    //string WORRY_COUNT_s = "WORRY_COUNT"; //
+    string DUMP = "DUMP"; // DUMP
+    string NEXT = "NEXT"; // NEXT
+    int NEXT_Count = 0;
+
+    vector<string> business(0); // очередь
+    for (int i = 0; i < months[NEXT_Count]; i++) { // create vector
+        business.push_back("");
+    }
+    for (int i=0; i<n; i++){
+
+        // Input
+        string a1;
+        cin >> a1;
+        if (a1 == NEXT) { // NEXT
+            vector<string> business_next(0);  // create next vector
+            NEXT_Count++;
+            if (NEXT_Count > 11) {
+                NEXT_Count = 0;
+            }
+           // cout << "this mmnth : "<< business.size() << " next mmnth: " <<  months[NEXT_Count] << endl;
+                if (business.size() <= months[NEXT_Count]){ // если следующий месяц имеет больше дней,
+                    business.resize( months[NEXT_Count]);
+                }
+                else{ // если следующий месяц имеет меньше дней
+
+                    vector<string> business_next(months[NEXT_Count]);
+                    for (int i = 0 ; i < business_next.size(); i++) { // create vector not including last element
+                        business_next[i] = business[i];
+                        
+                    }
+                  
+                    for (int i = months[NEXT_Count] ; i < business.size(); i++) {
+                        business_next[ months[NEXT_Count]-1] += business[i];
+                       
+                    }
+
+                  
+                    business.resize( months[NEXT_Count]);
+                    business = business_next;
+               
+                }
+            }
+            //cout << endl;
+            //cout  << count(queue.begin(), queue.end(), "w") << endl;
+
+        else if(a1 == DUMP){ // DUMP, print(a[i])
+            int pos;
+            cin >> pos;
+            pos = pos - 1;
+            std::istringstream iss( business[pos]);
+            std::vector<std::string> results(std::istream_iterator<std::string>{iss},
+                                                 std::istream_iterator<std::string>());
+            cout  << results.size() << " " << business[pos] << endl;
+        }
+        else { // ADD ,
+            int pos;
+            string task;
+            cin >>  pos >> task;
+            pos = pos - 1;
+            action(business, pos, task);
+        }
+        /*
+        cout << "size " << business.size() << endl;
+        for (int i=0; i<business.size(); i++){ // print vector (queue)
+            if (business[i] != "") {
+                std::istringstream iss( business[i]);
+                std::vector<std::string> results(std::istream_iterator<std::string>{iss},
+                                                 std::istream_iterator<std::string>());
+                cout  << results.size() <<  " ";
+                cout << i << " " << business[i] << " ";
+            }
+        }
+         */
+    }
+
+
+    return 0;
+}
