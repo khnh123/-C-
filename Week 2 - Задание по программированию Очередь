@@ -1,0 +1,71 @@
+
+#include <iostream>
+#include <cmath>
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+void action(vector<string> &queue, string input, int pos = 0){
+    string WORRY = "WORRY"; //+int
+    string QUIET  = "QUIET"; //+int
+    string COME = "COME"; // +int, -int
+    //string WORRY_COUNT_s = "WORRY_COUNT"; // +int, -int
+    //int WORRY_COUNT = 0;
+    //  cout << input << " " << pos;
+
+    // WORRY action
+    if (input == WORRY) {
+        queue[pos] = "w";
+    }
+    else if (input == QUIET) { // QUIET action
+        queue[pos] = "q";
+    }
+    else if (input == COME) {
+        if (pos > 0) { // COME k: action
+            //vector<string> vect(pos, "c");
+            for (int i = 0; i < pos; i++) {
+                queue.push_back("c");
+            }
+        }
+        else if (pos < 0)  { // COME -k: action
+            //cout << queue.size()+pos;
+            for (int i = 0; i < abs(pos); i++) {
+                queue.pop_back();
+            }
+        }
+    }
+    /*
+    for (int i=0; i<queue.size(); i++){ // print vector (queue)
+        cout << queue[i] << " " ;
+    }
+     */
+
+}
+
+int main () {
+    int n;
+    cin >> n; //  Количество операций Q,
+
+    vector<string> queue(0); // очередь
+    string WORRY_COUNT_s = "WORRY_COUNT"; // +int, -int
+
+    for (int i=0; i<n; i++){
+        // Input
+        string a1;
+        cin >> a1;
+        if (a1 == WORRY_COUNT_s) {
+            //cout << endl;
+            cout  << count(queue.begin(), queue.end(), "w")  << endl;
+        }
+        else {
+            int a2;
+            cin >>  a2;
+            action(queue, a1, a2);
+        }
+    }
+
+
+    return 0;
+}
