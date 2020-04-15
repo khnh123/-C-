@@ -1,0 +1,113 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <iterator>
+using namespace std;
+
+void Action_CHANGE_CAPITAL(map<string, string> &d, string country, string new_capital){
+    // CHANGE_CAPITAL action
+    map<std::string, string>::iterator it;
+    it = d.find(country);
+    if ( it == d.end()) { // search key
+        // not found
+        d[country]=new_capital;
+        cout << "Introduce new country " << country <<  " with capital "  << new_capital ;
+    } else {
+        // found
+        // Access the Key from iterator
+        string key = it->first;
+        // Access the Value from iterator
+        string value = it->second;
+        // std::cout << "key = " << key << " :: Value = " << value << std::endl;
+        if (new_capital == value){
+            cout << "Country " << country<< " hasn't changed its capital";
+        }
+        else if(new_capital != key){
+            d[country]=new_capital;
+            cout << "Country " << country<< " has changed its capital from " << value << " to " << new_capital;
+        }
+    }
+}
+void Action_RENAME(map<string, string> &d, string old_country_name , string new_country_name ){
+    map<std::string, string>::iterator it;
+    it = d.find(old_country_name);
+    if (it == d.end()){ // страна old_country_name не существует
+        cout << "Incorrect rename, skip";
+    }
+    else if (old_country_name == new_country_name) { // если новое название страны совпадает со старым,
+        cout << "Incorrect rename, skip" ;
+    }
+    else if (d.count(new_country_name) > 0) { // страна new_country_name уже существует;
+        // not found
+        //d[country]=new_capital;
+        cout << "Incorrect rename, skip";
+    }
+    else if (d.count(old_country_name) > 0 ) { // если запрос корректен и страна имеет столицу capital.
+        string key = it->first;
+        string value = it->second;
+        //std::cout << "key = " << key << " :: Value = " << value << std::endl;
+        d[new_country_name]=value;
+        d.erase(key);
+        cout << "Country " << old_country_name << " with capital " << value << " has been renamed to " << new_country_name ;
+    }
+}
+void Action_ABOUT(map<string, string> &d, string country)
+{
+    map<std::string, string>::iterator it;
+    it = d.find(country); // Check if element exists in map or not
+    if (it != d.end()) // Country country has capital capital, если страна country существует и имеет столицу capital.
+    {
+        // Element with key found
+        // Access the Key from iterator
+        string key = it->first;
+        string value = it->second;
+        cout << "Country " << key << " has capital " << value ;
+    }
+    else { // Country country doesn't exist, если страны с названием country не существует;
+        cout << "Country " << country << " doesn't exist" ;
+    }
+}
+
+void Action_DUMP(map<string, string> &d){
+    if (d.size() == 0) {
+        cout << "There are no countries in the world" ;
+    }
+    for (const auto& item : d){
+        cout << item.first << "/" << item.second << " ";
+    }
+}
+
+int main ( ) {
+    int n;
+    cin >> n; //  Количество операций Q,
+    map <string, string> dict;
+    string CHANGE_CAPITAL = "CHANGE_CAPITAL"; // CHANGE_CAPITAL
+    string RENAME = "RENAME"; // RENAME
+    string ABOUT = "ABOUT"; // ABOUT
+    string DUMP = "DUMP"; // DUMP
+
+    for (int i = 0; i < n; i++) {
+        string a1;
+        cin >> a1;
+        if (a1 == CHANGE_CAPITAL) {
+            string country, new_capital;
+            cin >> country >> new_capital;
+            Action_CHANGE_CAPITAL(dict, country, new_capital);
+        } else if (a1 == RENAME) {
+            string old_country_name, new_country_name;
+            cin >> old_country_name >> new_country_name;
+            Action_RENAME(dict, old_country_name, new_country_name);
+        } else if (a1 == ABOUT) {
+            string country;
+            cin >> country;
+            Action_ABOUT(dict, country);
+        } else if (a1 == DUMP) {
+            Action_DUMP(dict);
+        }
+        cout << endl;
+    }
+    
+return 0;
+}
