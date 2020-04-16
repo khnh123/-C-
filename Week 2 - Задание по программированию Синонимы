@@ -1,0 +1,67 @@
+#include <iostream>
+#include <string>
+#include <iterator>
+#include <set>
+using namespace std;
+
+
+void action_Check(const set<set <string>> &all, const set <string> &words)
+{
+    string check= "NO";
+    for (auto x : all){
+        if (x == words){ check = "YES"; break;}
+    }
+    cout << check << endl;
+}
+void action_COUNT(const set<set <string>> &all, const string &word)
+{
+    int c=0;
+    for (auto x : all){
+        for (auto y : x){
+            c += bool(word.compare(y)==0);
+        }
+    }
+    cout << c << endl;
+}
+
+
+int main ( ) {
+    int n;
+    cin >> n; //  Количество операций Q,
+
+    string ADD = "ADD"; //
+    string COUNT = "COUNT"; //
+    string CHECK = "CHECK"; //
+
+
+    string action;
+
+    set<set <string>> all;
+    for (int i=0; i<n; i++) {
+        string action;
+        cin >> action;
+        if (action == ADD) {
+            string a, b ;
+            cin >> a >> b;
+            set <string> words;
+            words.insert(a);
+            words.insert(b);
+            all.insert(words);
+        }
+        else if (action == CHECK) {
+            string a, b ;
+            cin >> a >> b;
+            set <string> words;
+            words.insert(a);
+            words.insert(b);
+            action_Check(all, words);
+        }
+        else if (action == COUNT) {
+            string word;
+            cin >> word;
+            action_COUNT(all, word);
+        }
+        //printset(all);
+    }
+    return 0;
+}
