@@ -1,0 +1,51 @@
+
+#include <iostream>
+#include <string>
+#include <vector>
+#include <map>
+#include <iterator>
+#include <algorithm>
+#include <set>
+
+using namespace std;
+
+void check( map<vector<string>,string>  &dict, int &order_i , vector<string> &stops){
+    string order_n;
+    vector<string> temp(0);
+        if (dict.count(stops)) {
+            cout << "Already exists for " <<  dict[stops] << "\n";
+        }
+        else {
+            order_i = order_i+1;
+            order_n = to_string(order_i);
+            dict[stops] = order_n;
+            cout << "New bus " << order_i << endl;
+        }
+}
+
+int main ( ) {
+    int n;
+    cin >> n; //  Количество операций Q,
+    string order_n;
+    map<vector<string>,string> dict;
+    int order_i = 1;
+    for (int i=0; i<n; i++) {
+        int stop_count;
+        string stop;
+        vector<string> stops(0);
+        cin >> stop_count;
+        for (int i = 0; i < stop_count; i++) {
+            cin >> stop;
+            stops.push_back(stop);
+        }
+        if (dict.size() == 0) {
+            order_n = to_string(order_i);
+            dict[stops] = order_n;
+            cout << "New bus " << order_n << endl;
+        }
+        else {
+            check(dict, order_i, stops);
+        }
+    }
+    return 0;
+}
