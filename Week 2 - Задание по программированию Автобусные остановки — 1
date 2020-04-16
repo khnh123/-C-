@@ -1,0 +1,171 @@
+
+#include <iostream>
+#include <string>
+#include <vector>
+#include <map>
+#include <iterator>
+#include <algorithm>
+#include <set>
+
+using namespace std;
+struct comp
+{
+    template<typename T>
+    bool operator()(const T& l, const T& r) const
+    {
+        if (l.second != r.second)
+            return l.second < r.second;
+
+        return l.first < r.first;
+    }
+};
+
+void action_ALL_BUSES(map<string, map<int, std::vector<string>> > &dict){
+    if (dict.size() != 0) {
+        for(map<string, map<int, std::vector<string>> >::const_iterator ptr=dict.begin();ptr!=dict.end(); ptr++) {
+            cout << "Bus " << ptr->first << ":";
+            for( map<int, std::vector<string>>::const_iterator eptr=ptr->second.begin();eptr!=ptr->second.end(); eptr++){
+                //cout << eptr->first << ": ";
+                for (int i=0; i<eptr->second.size(); i++) {
+                    cout << " " << eptr->second[i];
+                }
+                cout << endl;
+            }
+
+        }
+    }
+    else {
+        cout << "No buses" <<endl;
+    }
+}
+void action_BUSES_FOR_STOP(map<string, map<int, std::vector<string>> > &dict, string stop,vector< pair <string,int> > order){
+    vector<string> stops(0);
+    vector<string> new1(0);
+    if (dict.size() != 0) {
+        for(map<string, map<int, std::vector<string>> >::const_iterator ptr=dict.begin();ptr!=dict.end(); ptr++) {
+            //cout << ptr->first << ": ";
+            for( map<int, std::vector<string>>::const_iterator eptr=ptr->second.begin();eptr!=ptr->second.end(); eptr++){
+                //cout << eptr->first << ": ";
+                for (int i=0; i<eptr->second.size(); i++) {
+                    if (stop == eptr->second[i]) {
+                        //cout << ptr->first << " ";
+                        stops.push_back( ptr->first);
+                    }
+                }
+            }
+        }
+        std::set<std::pair<std::string,int>, comp> set(order.begin(), order.end());
+        for (auto const &pair: set) {
+            //std::cout << '{' << pair.first << "," << pair.second << '}' << '\n';
+            for (int i = 0; i < stops.size(); i++) {
+                if (stops[i] == pair.first) {
+                    //cout << pair.first << " ";
+                    new1.push_back(pair.first);
+                }
+            }
+        }
+    }
+    if (new1.size() > 0){
+        for (int i = 0; i < new1.size(); i++) {
+            cout << new1[i] << " ";
+        }
+    }
+    else {
+        cout << "No stop" ;
+    }
+    cout << endl;
+}
+void action_STOPS_FOR_BUS(map<string, map<int, std::vector<string>> > &dict, string bus,vector< pair <string,int> > order){
+    vector<string> stops(0);
+    if (dict.size() != 0 && dict.count(bus) > 0) { // wrong, check if bus in dict
+        for (const auto &item :  dict[bus]) {
+            //cout << item.first << "/" ;
+            for (const auto &item : dict[bus][item.first]) {
+                cout << "Stop " << item << ": ";
+                for (map<string, map<int, std::vector<string>>>::const_iterator ptr = dict.begin();
+                     ptr != dict.end(); ptr++) {
+                    for (map<int, std::vector<string>>::const_iterator eptr = ptr->second.begin();
+                         eptr != ptr->second.end(); eptr++) {
+                        for (int i = 0; i < eptr->second.size(); i++) {
+                            if (item == eptr->second[i]) {
+                                stops.push_back(ptr->first);
+                            }
+                        }
+                    }
+                }
+                if (stops.size() == 1 && stops[0]==bus){
+                    cout <<"no interchange";
+                }
+                else {
+                    std::set<std::pair<std::string,int>, comp> set(order.begin(), order.end());
+                    for (auto const &pair: set) {
+                        //std::cout << '{' << pair.first << "," << pair.second << '}' << '\n';
+                        for (int i = 0; i < stops.size(); i++) {
+                            if (stops[i] == pair.first && (stops[i]!= bus)) {
+                                cout << pair.first << " ";
+                                //new1.push_back(bus[i]);
+                            }
+                        }
+                    }
+                    //for (int i = 0; i < stops.size(); i++) {
+                    //  if (stops[i]!= bus) {
+                    //    cout << stops[i] << " ";
+                    //}
+                }
+                stops.clear();
+                cout << endl;
+            }
+        }
+    }
+
+else {
+    cout << "No bus" << endl ;
+}
+}
+
+
+int main ( ) {
+    int n;
+    cin >> n; //  Количество операций Q,
+
+    string NEW_BUS  = "NEW_BUS"; // NEW_BUS
+    string BUSES_FOR_STOP  = "BUSES_FOR_STOP"; // BUSES_FOR_STOP
+    string STOPS_FOR_BUS  = "STOPS_FOR_BUS"; // STOPS_FOR_BUS
+    string ALL_BUSES  = "ALL_BUSES"; // ALL_BUSES
+
+    map<string, map<int, std::vector<string>> > dict;
+    vector< pair <string,int> > order;
+    int order_n = 0;
+
+    for (int i=0; i<n; i++) {
+        string a1;
+        cin >> a1;
+        if (a1 == NEW_BUS) {
+            string bus;
+            int stop_count;
+            string stop;
+            vector<string> stops(0);
+            cin >> bus >> stop_count;
+            order.push_back( make_pair(bus,order_n) );
+            order_n = order_n + 1;
+            for (int i = 0; i < stop_count; i++) {
+                cin >> stop;
+                stops.push_back(stop);
+            }
+            dict[bus][stop_count] = stops;
+        } else if (a1 == ALL_BUSES) {
+            action_ALL_BUSES(dict);
+        } else if (a1 == BUSES_FOR_STOP) {// does not work
+            string stop;
+            cin >> stop;
+            action_BUSES_FOR_STOP(dict, stop, order);
+        } else if (a1 == STOPS_FOR_BUS) {
+            string bus;
+            cin >> bus;
+            action_STOPS_FOR_BUS(dict, bus, order);
+        }
+
+        // cout << endl;
+    }
+    return 0;
+}
