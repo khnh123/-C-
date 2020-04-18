@@ -1,0 +1,21 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main ( ) {
+    int n;
+    cin >> n; //  Количество операций Q,
+
+    vector<int> A(0);
+    for (int i=0; i<n; i++) {
+        int a;
+        cin >> a;
+        A.push_back(a);
+    }
+    sort(std::begin(A), std::end(A), [](int a, int b) {return abs(a) < abs(b); });
+    for (int i=0; i < A.size(); i++) {
+        cout << A[i] << " ";
+    }
+    return 0;
+}
