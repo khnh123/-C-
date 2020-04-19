@@ -1,0 +1,122 @@
+
+#include <iostream>
+#include <string>
+#include <vector>
+#include <map>
+#include <iterator>
+
+
+using namespace std;
+
+
+struct FullName {
+    string first_name;
+    string last_name;
+};
+class Person {
+public:
+    void ChangeFirstName(int year, const string& first_name) {
+        // добавить факт изменения имени на first_name в год year
+        if (data.count(year) == 0) {
+            data[year].last_name = "";
+        }//если такого года еще нет, то добавим пустую фамилию в этот год
+        data[year].first_name = first_name; //добавим указанное имя
+
+    }
+    void ChangeLastName(int year, const string& last_name) {
+        // добавить факт изменения фамилии на last_name в год year
+        if (data.count(year) == 0){
+            data[year].first_name = "";
+        }
+        //если такого года еще нет, то добавим пустую фамилию в этот год
+        data[year].last_name = last_name; //добавим указанное имя
+
+    }
+    string GetFullName(int year) {
+        // получить имя и фамилию по состоянию на конец года year
+        if (data.size() == 0) { //если размер = 0
+            return "Incognito"; //выводим Инкогнито
+        }
+        else { //ну или так
+            for (const auto &i : data) {
+                if (year < i.first) {
+                    return "Incognito";
+                }
+                //если искомый год меньше первого года изменения, выводим Инкогнито
+                break; //сразу выходим из цикла
+            }
+        }
+        //иначе
+        string name = "";
+        string surname = "";
+        for (const auto &i : data) {
+            //и будем присваивать переменной surname значение фамилии, если она не пустая и пока искомый год больше текущего(в структуре)
+            if (i.first <= year && i.second.last_name != "") surname = i.second.last_name;
+            //тоже самое с именем
+            if (i.first <= year && i.second.first_name != "") name = i.second.first_name;
+        }
+        if (name == "") return surname + " with unknown first name"; //"last_name with unknown first name".
+        else if (surname == "") return name + " with unknown last name"; //"first_name with unknown last name".
+        else return name + " " + surname; //вывод имени и фамилии
+    }
+
+
+    string GetFullNameWithHistory(int year) {
+        if (data.size() == 0) { //если размер = 0
+            return "Incognito"; //выводим Инкогнито
+        }
+        else {
+            for (const auto& i : data) {
+                if (year < i.first) return "Incognito"; //если искомый год меньше первого года изменения, выводим Инкогнито
+                break; //сразу выходим из цикла
+            }
+        }
+        //иначе
+        string nm = "";
+        string sn = "";
+        vector<string> secondnames; //вектор предыдущих фамилий
+        vector<string> firstnames; //вектор предыдущих имен
+        for (const auto& i : data) { //полистаем нашу структуру
+            //и будем присваивать переменной sn значение фамилии, если она не пустая и пока искомый год больше текущего(в структуре)
+            if (i.first <= year && i.second.last_name != "") { //если Фамилия непуста
+                if (i.second.last_name != sn && sn != "") { //и не повторяется
+                    secondnames.push_back(sn);
+                }
+                sn = i.second.last_name; //тут присваиваем
+            }
+            if (i.first <= year && i.second.first_name != "") { //то же самое с Именем
+                if (i.second.first_name != nm && nm != "") {
+                    firstnames.push_back(nm);
+                }
+                nm = i.second.first_name;
+            }
+        }
+        //инициализируем переменные в которые будем складывать фамилии и имена в обратном порядке
+        string secnames_string = "", firstnames_string = "";
+        if (secondnames.size() > 0) { //если вектор с фамилиями не пуст, то
+            secnames_string += " (" + secondnames[secondnames.size() - 1]; //добавим в строку пробел, скобку и предыдущую фамилию
+            if (secondnames.size() > 1) {
+                for (int i = secondnames.size() - 1; i > 0; --i) {//в обратном порядке
+                    secnames_string += ", " + secondnames[i - 1]; // добавим в строку остальные фамилии
+                }
+            }
+            secnames_string += ")"; //закроем строку скобкой
+        }
+        //аналогично с именами
+        if (firstnames.size() > 0) {
+            firstnames_string += " (" + firstnames[firstnames.size() - 1];
+            if (firstnames.size() >1) {
+                for (int i = firstnames.size() - 1; i > 0; --i) {
+                    firstnames_string += ", " + firstnames[i - 1];
+                }
+            }
+            firstnames_string += ")";
+        }
+        //в зависимости от наличия Имени и Фамилии, вернем соответствующие сообщения
+        if (nm == "") return sn + secnames_string + " with unknown first name";
+        else if (sn == "") return nm + firstnames_string + " with unknown last name";
+        else return nm + firstnames_string + " " + sn + secnames_string;
+    }
+private: // приватные поля
+    map<int, FullName> data; //структуру с годом и полным именем
+};
