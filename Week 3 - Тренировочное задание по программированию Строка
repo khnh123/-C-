@@ -1,0 +1,23 @@
+#include <algorithm>
+#include <string>
+
+using namespace std;
+
+
+
+class ReversibleString {
+public:
+    ReversibleString(){};
+    ReversibleString(const string &a){
+        word = a;
+    };
+    string ToString()  const{
+        return word;
+    };
+    void Reverse() {
+        reverse(begin(word), end(word));
+    }
+private:
+    string word;
+    //string reversed_word
+};
