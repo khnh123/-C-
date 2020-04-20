@@ -1,0 +1,15 @@
+
+#include <iostream>
+#include <string>
+#include <vector>
+#include <map>
+
+using namespace std;
+
+class Incognizable {
+public:
+    Incognizable() {};
+    Incognizable(const int &s1){};
+    Incognizable(const int &s1, const int &s2) {
+    };
+};
