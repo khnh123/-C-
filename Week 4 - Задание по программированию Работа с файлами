@@ -1,0 +1,22 @@
+#include <fstream>
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main () {
+    string name;
+    string name1;
+    name = "input.txt";
+    name1 = "output.txt";
+    ifstream input(name);
+    ofstream output(name1);
+    if (input) {
+        string line;
+            while (getline (input, line)){
+            //cout << line << endl; task 1 reading a file
+            output << line << endl;
+        }
+    }
+
+return 0;
+}
