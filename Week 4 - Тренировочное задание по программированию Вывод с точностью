@@ -1,0 +1,27 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <iomanip>
+#include <fstream>
+using namespace std;
+
+int main () {
+    string name;
+    string name1;
+    name = "input.txt";
+    name1 = "output.txt";
+    ifstream input(name);
+    ofstream output(name1);
+    if (input) {
+        string line;
+        cout << fixed << setprecision(3);
+        while (getline (input, line)){
+            // cout << fixed << setprecision(3);
+            double a = atof(line.c_str());
+            cout << a << endl;
+            //output << line << endl;
+        }
+    }
+
+    return 0;
+}
