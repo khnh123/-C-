@@ -1,0 +1,147 @@
+
+#include <iostream>
+#include <string>
+#include <vector>
+#include <map>
+#include <iterator>
+#include <algorithm>
+
+
+#include <fstream>
+#include <iomanip>
+using namespace std;
+
+
+
+struct Student { // Определите структуру «Студент» со следующими полями: имя, фамилия, день, месяц и год рождения.
+    string first_name;
+    string last_name;
+    unsigned long long int day;
+    unsigned long long int month;
+    unsigned long long int year;
+};
+class Student_List {
+public:
+    Student_List() {}
+    Student_List(const int &i, string & new_1,  string& new_2,  unsigned long long int & new_3, unsigned long long int & new_4,  unsigned long long int & new_5){
+        Add(i, new_1,  new_2,   new_3, new_4,  new_5);
+       // Print();
+    }
+
+
+    void Add(int counter, string & new_1,  string& new_2,  unsigned long long int & new_3, unsigned long long int & new_4,  unsigned long long int & new_5) {
+
+        data[counter].first_name = new_1; //добавим указанное имя
+        data[counter].last_name = new_2; //добавим указанное имя
+        data[counter].day = new_3; //добавим указанное имя
+        data[counter].month = new_4; //добавим указанное имя
+        data[counter].year = new_5; //добавим указанное имя
+
+    }
+/*
+    void Print() const{
+        cout << data.size() << endl;
+            for(auto it = data.cbegin(); it != data.cend(); ++it)
+            {
+                cout << it-> first << " " <<  it->second.first_name << " " <<  it->second.last_name << " " <<  it->second.day  << " " <<  it->second.month  << " " <<  it->second.year << "\n";
+            }
+    }
+*/
+    void Request(const string action, int n) {
+        if (n > 0) {
+            if (action == "name" && n <= data.size()) { // Для запроса вида name K,
+                it = data.find(n - 1);
+                if (it != data.end()) { cout << it->second.first_name << " " << it->second.last_name << endl; }
+            } else if (action == "date" && n <= data.size()) { // Для запроса вида date K,
+                it = data.find(n - 1);
+                if (it != data.end()) {
+                    cout << it->second.day << "." << it->second.month << "." << it->second.year << endl;
+                }
+            } else { // Для остальных запросов выведите bad request.
+                cout << "bad request" << endl;
+            }
+        }
+        else { // Для остальных запросов выведите bad request.
+            cout << "bad request" << endl;
+        }
+    }
+
+
+
+private: // приватные поля
+    map<int, Student> data; //структуру с годом и полным именем
+    map<int, Student>:: iterator it; //структуру с годом и полным именем
+};
+
+int main() {
+
+    // with file
+    //a.Add("Polina", "Sergeeva",2,1 ,1960);
+    //  ifstream input("input.txt");
+
+    //string line;
+    string first_name;
+    string last_name;
+    unsigned long long int day;
+    unsigned long long int month;
+    unsigned long long int year;
+    long int qnt_students;
+    Student_List a;
+/*
+    // with file
+    string name;
+    name = "C:\\Users\\khini\\CLionProjects\\untitled3\\input.txt";
+    ifstream input(name);
+    if (input){
+        input >> qnt_students; // Первая строка содержит одно целое число N от 0 до 10000 — число студентов.
+        for (int i = 0; i < qnt_students; i++) { //Далее идут N строк
+            //cout << line << endl;
+            // input.ignore(1);
+            input >> first_name;
+            //   input.ignore(1);
+            input >> last_name ;
+            // input.ignore(1)  ;
+            input >> day ;
+            //input.ignore(1);
+            input >> month;
+            //input.ignore(1);
+            input >> year ;
+            a.Add(i, first_name, last_name,day , month, year);
+
+            //a.Print();
+        }
+        //cout << "------"<< endl;
+        //a.Print();
+        //cout << "------"<< endl;
+        int M = 0 ;
+        input >> M; // Первая строка содержит одно целое число N от 0 до 10000 — число студентов.
+        for (int i = 0; i < M; i++) { //Далее идут N строк
+            string action;
+            int n;
+            input >> action;
+            input >> n;
+            a.Request(action,n);
+        }
+    }
+*/
+    // with input
+    signed int number,number2;
+    cin >> number; // Первая строка содержит одно целое число N от 0 до 10000 — число студентов.
+    for (int i = 0; i < number; i++) { //Далее идут N строк
+        string line;
+       // getline (std::cin,line);
+        cin  >> first_name >> last_name >> day >> month >> year;
+        a.Add(i, first_name, last_name,day , month, year);
+    }
+   // cout << "------"<< endl;
+  //  a.Print();
+  //  cout << "------"<< endl;
+    cin >> number2;
+    for (int i = 0; i < number2; i++) { //Далее идут N строк
+        string action;
+        int n;
+        cin  >> action >> n;
+        a.Request(action,n);
+    }
+    return 0;
+}
