@@ -1,0 +1,119 @@
+
+#include <iostream>
+using namespace std;
+
+int gcd (int first, int second)
+{
+    if (second == 0)
+    {
+        return first;
+    }
+    else
+    {
+        return gcd (second, first % second);
+    }
+};
+
+class Rational {
+public:
+    Rational() {
+        numerator1 = 0;
+        denominator1 = 1;
+    }
+
+    Rational(int numerator, int denominator) {
+        int d = gcd(numerator,denominator);
+        numerator1 = (numerator / d) ;
+        denominator1 = (denominator / d);
+        // 3. Если дробь p/q отрицательная
+        if (numerator1 < 0 || denominator1 < 0) { // числитель - OR знаменатель -
+            //Если дробь p/q отрицательная
+            //должен иметь отрицательный числитель и положительный знаменатель.
+            numerator1 = abs(numerator1) * -1;
+            denominator1 = abs(denominator1);
+        }
+        else if (numerator1 < 0 && denominator1 < 0) { // числитель - : знаменатель -
+            //Если дробь p/q положительная,
+            //должен иметь положительные числитель и знаменатель Rational(-2, -3)).
+            numerator1 = abs(numerator1);
+            denominator1 = abs(denominator1);
+        }
+        else if (numerator1 == 0 && denominator1 != 0) { // числитель 0 : знаменатель +-
+            //Если числитель дроби равен нулю, то знаменатель должен быть равен 1.
+            denominator1 = 1;
+        }
+
+    }
+
+    int Numerator() const {
+        return numerator1;
+    }
+
+    int Denominator() const {
+        return denominator1;
+    }
+    Rational& operator=(const Rational& a) {
+        //проверка на самоприсваивание
+        if (this == &a) {
+            return *this;
+        }
+        numerator1 = a.Numerator();
+        denominator1 = a.Denominator();
+        return *this;
+    }
+
+
+
+private:
+    int numerator1;
+    int denominator1;
+};
+Rational operator + (const Rational& a, const Rational& b) {
+    return{
+            a.Numerator() * b.Denominator() + b.Numerator() * a.Denominator(),
+            a.Denominator() * b.Denominator()
+    };
+}
+Rational operator - (const Rational& a, const Rational& b) {
+    return{
+            a.Numerator() * b.Denominator() - b.Numerator() * a.Denominator(),
+            a.Denominator() * b.Denominator()
+    };
+}
+
+bool operator==(const Rational& lhs,const Rational rhs){
+    return (lhs.Numerator() == rhs.Numerator()) && (lhs.Denominator() == rhs.Denominator());
+}
+
+Rational operator * (const Rational& a, const Rational& b) {
+    return{
+            a.Numerator() * b.Numerator(),
+            a.Denominator() * b.Denominator()
+    };
+}
+Rational operator / (const Rational& a, const Rational& b) {
+
+    return a * Rational(b.Denominator(), b.Numerator());
+}
+
+istream& operator>>(istream& stream, Rational& a){
+    int numerator = 0, denominator = 0;
+    char c;
+    if (stream >> numerator>> c >> denominator) {
+        a = {numerator, denominator};
+    };
+
+    return stream;
+}
+ostream& operator<<(ostream& stream, const Rational& a){
+    stream << a.Numerator() <<"/"<< a.Denominator();
+    return stream;
+}
+bool operator>(const Rational& lhs, const Rational rhs){
+    int cmp = lhs.Numerator()*rhs.Denominator() - lhs.Denominator()*rhs.Numerator();
+    return cmp > 0;
+}
+bool operator<(const Rational& lhs, const Rational rhs){
+    int cmp = lhs.Numerator()*rhs.Denominator() - lhs.Denominator()*rhs.Numerator();
+    return cmp < 0;
+}
