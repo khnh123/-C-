@@ -1,0 +1,41 @@
+
+#include <iostream>
+#include <exception>
+#include <string>
+using namespace std;
+
+string AskTimeServer() {
+    throw runtime_error("something");
+
+    /* Для тестирования повставляйте сюда код, реализующий различное поведение этой функии:
+       * нормальный возврат строкового значения
+       * выброс исключения system_error
+       * выброс другого исключения с сообщением.
+    */
+}
+
+class TimeServer {
+public:
+    string GetCurrentTime() {
+        try {
+            last_fetched_time = AskTimeServer();
+        }
+        catch(system_error& ){
+            return last_fetched_time;
+        }
+        return last_fetched_time;
+    }
+private:
+    string last_fetched_time = "00:00:00";
+};
+
+int main() {
+    // �亠仆���� �亠舒仍亳亰舒�亳�� ��仆从�亳亳 AskTimeServer, �弍亠亟亳�亠��, ��仂 ��仂 从仂亟 �舒弍仂�舒亠� 从仂��亠从�仆仂
+    TimeServer ts;
+    try {
+        cout << ts.GetCurrentTime() << endl;
+    } catch (exception& e) {
+        cout << "Exception got: " << e.what() << endl;
+    }
+    return 0;
+}
